@@ -102,7 +102,7 @@ export default function ExperienceSection() {
 
                   <div className='flex items-center text-gray-500 mb-2 text-sm'>
                     <Calendar className='h-3.5 w-3.5 mr-2' />
-                    <span>2019 - 2023</span>
+                    <span>2023 - Sekarang</span>
                   </div>
 
                   <div className='flex items-center text-gray-500 mb-4 text-sm'>
@@ -150,7 +150,7 @@ export default function ExperienceSection() {
 
                   <div className='flex items-center text-gray-500 mb-2 text-sm'>
                     <Calendar className='h-3.5 w-3.5 mr-2' />
-                    <span>2020 - 2022</span>
+                    <span>2024 - 2025</span>
                   </div>
 
                   <div className='flex items-center text-gray-500 mb-4 text-sm'>
