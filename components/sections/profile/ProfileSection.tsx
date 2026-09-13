@@ -43,49 +43,9 @@ const socialCards: SocialHoverCard[] = [
   },
 ];
 
-// Helper to render the GitHub contribution graph
-function GithubGraph() {
-  const cols = 28;
-  const rows = 7;
-  return (
-    <div className='flex gap-[2px] mt-4'>
-      {Array.from({ length: cols }).map((_, c) => (
-        <div key={c} className='flex flex-col gap-[2px]'>
-          {Array.from({ length: rows }).map((_, r) => {
-            // Generate some random "commits" for realism, mostly empty
-            const rand = Math.random();
-            let bg = 'bg-zinc-800/80';
-            if (rand > 0.95) bg = 'bg-emerald-400';
-            else if (rand > 0.85) bg = 'bg-emerald-600';
-            else if (rand > 0.75) bg = 'bg-emerald-800';
-            else if (rand > 0.6) bg = 'bg-emerald-950';
 
-            return (
-              <div
-                key={r}
-                className={`w-[7px] h-[7px] rounded-[1px] ${bg}`}
-              />
-            );
-          })}
-        </div>
-      ))}
-    </div>
-  );
-}
 
 function SocialIcon({ card }: { card: SocialHoverCard }) {
-  const [hovered, setHovered] = useState(false);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  const handleEnter = () => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    setHovered(true);
-  };
-
-  const handleLeave = () => {
-    timeoutRef.current = setTimeout(() => setHovered(false), 200);
-  };
-
   const renderIcon = () => {
     switch (card.platform) {
       case 'github':
@@ -110,90 +70,16 @@ function SocialIcon({ card }: { card: SocialHoverCard }) {
     }
   };
 
-  const platformColor =
-    card.platform === 'github'
-      ? 'border-zinc-700'
-      : card.platform === 'linkedin'
-        ? 'border-zinc-700'
-        : 'border-zinc-700';
-
   return (
-    <div className='relative' onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
-      <a
-        href={card.url}
-        target='_blank'
-        rel='noopener noreferrer'
-        className='inline-flex items-center justify-center w-9 h-9 rounded-full text-zinc-400 hover:text-zinc-300 hover:bg-zinc-800/50 transition-all duration-200'
-        aria-label={card.platform}
-      >
-        {renderIcon()}
-      </a>
-
-      {/* Hover Card */}
-      <AnimatePresence>
-        {hovered && (
-          <motion.div
-            initial={{ opacity: 0, y: 10, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 10, scale: 0.98 }}
-            transition={{ duration: 0.15, ease: 'easeOut' }}
-            className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-[280px] bg-[#141415] border border-zinc-800 rounded-xl shadow-2xl p-4 z-50`}
-            onMouseEnter={handleEnter}
-            onMouseLeave={handleLeave}
-          >
-            {card.isGithub ? (
-              // GitHub specific hover card layout
-              <div>
-                <div className='flex items-center gap-3'>
-                  <div className='w-12 h-12 rounded-full bg-zinc-800 overflow-hidden flex-shrink-0'>
-                    <img
-                      src={card.avatar}
-                      alt={card.username}
-                      className='w-full h-full object-cover'
-                    />
-                  </div>
-                  <div className='min-w-0'>
-                    <p className='text-sm font-medium text-zinc-100 truncate'>
-                      {card.username}
-                    </p>
-                    <p className='text-[11px] text-zinc-500 truncate'>
-                      {card.contributions}
-                    </p>
-                  </div>
-                </div>
-                <GithubGraph />
-              </div>
-            ) : (
-              // Standard hover card layout
-              <div>
-                <div className='flex items-center gap-3 mb-3'>
-                  <div className='w-10 h-10 rounded-full bg-zinc-800 overflow-hidden flex-shrink-0'>
-                    <img
-                      src={card.avatar}
-                      alt={card.displayName}
-                      className='w-full h-full object-cover'
-                    />
-                  </div>
-                  <div className='min-w-0'>
-                    <p className='text-sm font-medium text-zinc-100 truncate'>
-                      {card.displayName}
-                    </p>
-                    <p className='text-xs text-zinc-500 truncate'>
-                      @{card.username}
-                    </p>
-                  </div>
-                </div>
-                {card.bio && (
-                  <p className='text-xs text-zinc-400 leading-relaxed'>
-                    {card.bio}
-                  </p>
-                )}
-              </div>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+    <a
+      href={card.url}
+      target='_blank'
+      rel='noopener noreferrer'
+      className='inline-flex items-center justify-center w-9 h-9 rounded-full text-zinc-400 hover:text-zinc-300 hover:bg-zinc-800/50 transition-all duration-200'
+      aria-label={card.platform}
+    >
+      {renderIcon()}
+    </a>
   );
 }
 
