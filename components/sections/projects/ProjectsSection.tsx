@@ -1,255 +1,190 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { Github, Globe } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { motion } from 'framer-motion';
+import { Github, ExternalLink, ArrowUpRight } from 'lucide-react';
 
-function ProjectCard({
-  title,
-  subtitle,
-  description,
-  tags,
-  imageSrc,
-  bgColor = 'bg-white',
-  textColor = 'text-gray-900',
-  sourceCodeUrl,
-  liveDemoUrl,
-  index,
-}: {
+type Project = {
   title: string;
-  subtitle?: string;
+  subtitle: string;
   description: string;
   tags: string[];
-  imageSrc?: string;
-  bgColor?: string;
-  textColor?: string;
+  imageSrc: string;
   sourceCodeUrl?: string;
   liveDemoUrl?: string;
-  index?: number;
-}) {
-  const [isVisible, setIsVisible] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
+};
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => {
-            setIsVisible(true);
-          }, (index || 0) * 150);
-        }
-      },
-      { threshold: 0.1 }
-    );
+const projects: Project[] = [
+  {
+    title: 'GeoSiaga',
+    subtitle: 'Pantau dan Tanggapi Bencana Secara Real-Time',
+    description:
+      'Platform digital untuk monitoring, pelaporan, dan koordinasi tanggap bencana. Wujudkan Indonesia yang lebih siap dan tanggap terhadap bencana.',
+    tags: ['Laravel', 'MySQL', 'React'],
+    imageSrc: '/assets/project/geosiaga.png',
+    sourceCodeUrl: 'https://github.com/codewithun/GeoSiaga',
+    liveDemoUrl: 'https://geosiaga.web.id',
+  },
+  {
+    title: 'Flexy POS',
+    subtitle: 'Point of Sale System for Retail Businesses',
+    description:
+      'Sistem kasir digital dengan fitur lengkap seperti pembayaran, penjualan, dan inventory management.',
+    tags: ['Flutter', 'Laravel', 'MySQL'],
+    imageSrc: '/assets/project/flexy.png',
+    sourceCodeUrl: 'https://github.com/codewithun/Flexy',
+    liveDemoUrl: 'https://flexy.my.id',
+  },
+  {
+    title: 'Mitra Karya Dashboard',
+    subtitle: 'Recruitment Monitoring & Management',
+    description:
+      'Sistem dashboard untuk memonitoring dan mengelola pekerjaan, psikotes, dan pengumuman pekerjaan di Mitra Karya Group yang dibuat secara kolaborasi.',
+    tags: ['PHP', 'MySQL', 'Laravel', 'React'],
+    imageSrc: '/assets/project/mitrakarya.png',
+    sourceCodeUrl: 'https://github.com/codewithwan/eRecruitment-Laravel',
+  },
+];
 
-    if (cardRef.current) {
-      observer.observe(cardRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, [index]);
-
+function ProjectCard({ project, index }: { project: Project; index: number }) {
   return (
-    <div
-      ref={cardRef}
-      className={`group transition-all duration-700 ease-out ${
-        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-      }`}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.4, delay: index * 0.1 }}
+      className='group'
     >
-      <Card className='overflow-hidden border border-gray-100 hover:border-red-100 shadow-sm hover:shadow-md transition-all duration-300 rounded-lg h-full bg-white'>
-        <div
-          className={`relative ${
-            imageSrc ? 'h-52 sm:h-56' : 'h-24'
-          } overflow-hidden`}
-        >
-          {/* Minimal overlay */}
-          <div className='absolute inset-0 z-10 p-5 flex flex-col justify-end bg-gradient-to-t from-black/60 to-transparent'>
-            <div className={`${textColor}`}>
-              <h3 className='text-xl font-semibold mb-1'>{title}</h3>
-              {subtitle && <p className='text-sm opacity-90'>{subtitle}</p>}
-            </div>
-          </div>
+      <div className='bg-[#141415] border border-zinc-800/80 hover:border-zinc-700 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-black/20'>
+        {/* Project Image */}
+        <div className='relative h-48 sm:h-52 overflow-hidden'>
+          <Image
+            src={project.imageSrc}
+            alt={`${project.title} screenshot`}
+            fill
+            sizes='(max-width: 768px) 100vw, 50vw'
+            className='object-cover group-hover:scale-[1.03] transition-transform duration-500'
+          />
+          {/* Gradient overlay */}
+          <div className='absolute inset-0 bg-gradient-to-t from-[#141415] via-transparent to-transparent' />
 
-          {/* Project image */}
-          {imageSrc && (
-            <Image
-              src={imageSrc}
-              alt={`${title} screenshot`}
-              fill
-              sizes='(max-width: 768px) 100vw, 33vw'
-              priority={false}
-              className='object-cover group-hover:scale-105 transition-transform duration-500'
-            />
-          )}
+          {/* Links overlay - visible on hover */}
+          <div className='absolute top-3 right-3 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300'>
+            {project.sourceCodeUrl && (
+              <a
+                href={project.sourceCodeUrl}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='p-2 rounded-lg bg-black/60 backdrop-blur-sm border border-white/10 text-white hover:bg-black/80 transition-all'
+                aria-label='Source code'
+              >
+                <Github className='h-3.5 w-3.5' />
+              </a>
+            )}
+            {project.liveDemoUrl && (
+              <a
+                href={project.liveDemoUrl}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='p-2 rounded-lg bg-black/60 backdrop-blur-sm border border-white/10 text-white hover:bg-black/80 transition-all'
+                aria-label='Live demo'
+              >
+                <ExternalLink className='h-3.5 w-3.5' />
+              </a>
+            )}
+          </div>
         </div>
 
-        <CardContent className='pt-5 px-5 relative'>
-          <p className='text-gray-600 mb-4 text-sm leading-relaxed line-clamp-3'>
-            {description}
+        {/* Content */}
+        <div className='p-5'>
+          <div className='flex items-start justify-between gap-2 mb-2'>
+            <div>
+              <h3 className='text-base font-semibold text-zinc-200 group-hover:text-zinc-50 transition-colors'>
+                {project.title}
+              </h3>
+              <p className='text-xs text-zinc-500 mt-0.5'>
+                {project.subtitle}
+              </p>
+            </div>
+            <ArrowUpRight className='h-4 w-4 text-zinc-600 group-hover:text-zinc-400 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 flex-shrink-0 mt-1' />
+          </div>
+
+          <p className='text-sm text-zinc-500 mb-4 line-clamp-2 leading-relaxed'>
+            {project.description}
           </p>
 
-          <div className='flex flex-wrap gap-1.5 mb-4'>
-            {tags.map((tag, i) => (
-              <Badge
+          {/* Tags */}
+          <div className='flex flex-wrap gap-1.5'>
+            {project.tags.map((tag, i) => (
+              <span
                 key={i}
-                variant='secondary'
-                className='bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 py-0.5 text-xs font-normal'
+                className='px-2 py-0.5 rounded-md text-[11px] font-medium bg-zinc-800/80 text-zinc-400 border border-zinc-700/40'
               >
                 {tag}
-              </Badge>
+              </span>
             ))}
           </div>
-        </CardContent>
-
-        <CardFooter className='border-t border-gray-100 flex justify-between gap-3 px-5 py-3'>
-          {sourceCodeUrl && (
-            <Button
-              variant='ghost'
-              size='sm'
-              className='text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-md text-xs'
-              onClick={() => window.open(sourceCodeUrl, '_blank')}
-            >
-              <Github className='h-3.5 w-3.5 mr-1.5' />
-              Source
-            </Button>
-          )}
-          {liveDemoUrl && (
-            <Button
-              variant='ghost'
-              size='sm'
-              className='text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-md text-xs'
-              onClick={() => window.open(liveDemoUrl, '_blank')}
-            >
-              <Globe className='h-3.5 w-3.5 mr-1.5' />
-              Demo
-            </Button>
-          )}
-        </CardFooter>
-      </Card>
-    </div>
+        </div>
+      </div>
+    </motion.div>
   );
 }
 
 export default function ProjectsSection() {
-  const [headerVisible, setHeaderVisible] = useState(false);
-  const [buttonVisible, setButtonVisible] = useState(false);
-  const headerRef = useRef<HTMLDivElement>(null);
-  const buttonRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const headerObserver = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setHeaderVisible(true);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    const buttonObserver = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => {
-            setButtonVisible(true);
-          }, 600);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (headerRef.current) {
-      headerObserver.observe(headerRef.current);
-    }
-    if (buttonRef.current) {
-      buttonObserver.observe(buttonRef.current);
-    }
-
-    return () => {
-      headerObserver.disconnect();
-      buttonObserver.disconnect();
-    };
-  }, []);
-
   return (
-    <section
-      id='projects'
-      className='py-16 scroll-mt-16 bg-white relative overflow-hidden'
-    >
-      {/* Simple divider */}
-      <div className='absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent' />
+    <section id='projects' className='scroll-mt-20'>
+      <div className='relative w-full max-w-3xl mx-auto'>
+        {/* Corner Accents for the Section */}
+        <div className="absolute top-0 left-0 w-2 h-2 border-t-[1.5px] border-l-[1.5px] border-zinc-500 z-20 pointer-events-none" />
+        <div className="absolute top-0 right-0 w-2 h-2 border-t-[1.5px] border-r-[1.5px] border-zinc-500 z-20 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-2 h-2 border-b-[1.5px] border-l-[1.5px] border-zinc-500 z-20 pointer-events-none" />
+        <div className="absolute bottom-0 right-0 w-2 h-2 border-b-[1.5px] border-r-[1.5px] border-zinc-500 z-20 pointer-events-none" />
 
-      <div className='container mx-auto px-4 sm:px-6 lg:px-8 relative z-10'>
-        {/* Header */}
-        <div
-          ref={headerRef}
-          className={`text-center mb-12 transition-all duration-700 ease-out ${
-            headerVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}
-        >
-          <h2 className='text-3xl font-semibold mb-4 text-red-600'>Projects</h2>
-          <p className='text-base text-gray-600 max-w-2xl mx-auto mb-8'>
-            Selected works showcasing my technical approach to solving
-            real-world problems
-          </p>
-        </div>
+        <div className='p-4'>
+          <div className='w-full'>
+            {/* Section Header */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4 }}
+              className='mb-10'
+            >
+              <h2 className='font-semibold tracking-tight text-[30px] text-zinc-100 mb-3'>
+                projects
+              </h2>
+              <p className='text-sm text-zinc-500'>
+                Selected works showcasing my approach to problem solving.
+              </p>
+            </motion.div>
 
-        <div className='grid md:grid-cols-2 xl:grid-cols-3 gap-5 max-w-6xl mx-auto'>
-          {' '}
-          <ProjectCard
-            title='Pantau dan Tanggapi Bencana'
-            subtitle='Secara Real-Time'
-            description='Platform digital untuk monitoring, pelaporan, dan koordinasi tanggap bencana. Wujudkan Indonesia yang lebih siap dan tanggap terhadap bencana.'
-            tags={['Laravel', 'MySQL', 'React']}
-            imageSrc='/assets/project/geosiaga.png'
-            bgColor='bg-blue-700'
-            textColor='text-white'
-            sourceCodeUrl='https://github.com/codewithun/GeoSiaga'
-            liveDemoUrl='https://geosiaga.web.id'
-            index={0}
-          />
-          <ProjectCard
-            title='Point of Sale System'
-            subtitle='For Retail Businesses'
-            description='Sistem kasir digital dengan fitur lengkap seperti pembayaran, penjualan, dan inventory management.'
-            tags={['Flutter', 'Laravel', 'MySQL']}
-            imageSrc='/assets/project/flexy.png'
-            bgColor='bg-green-600'
-            textColor='text-white'
-            sourceCodeUrl='https://github.com/codewithun/Flexy'
-            liveDemoUrl='https://flexy.my.id'
-            index={1}
-          />
-          <ProjectCard
-            title='Dashboard Recruitment Mitra Karya Group'
-            subtitle='Monitoring and Management'
-            description='Sistem dashboard untuk memonitoring dan mengelola pekerjaan, psikotes, dan pengumuman pekerjaan di Mitra Karya Group yang dibuat secara kolaborasi.'
-            tags={['PHP', 'MySQL', 'Laravel', 'React']}
-            imageSrc='/assets/project/mitrakarya.png'
-            bgColor='bg-purple-600'
-            textColor='text-white'
-            sourceCodeUrl='https://github.com/codewithwan/eRecruitment-Laravel'
-            index={2}
-          />{' '}
-        </div>
+            {/* Projects Grid */}
+            <div className='grid gap-4 sm:grid-cols-2'>
+              {projects.map((project, index) => (
+                <ProjectCard key={project.title} project={project} index={index} />
+              ))}
+            </div>
 
-        {/* View More Projects Button - simplified */}
-        <div
-          ref={buttonRef}
-          className={`text-center mt-10 transition-all duration-700 ease-out ${
-            buttonVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}
-        >
-          <Button
-            variant='outline'
-            className='px-5 py-2 border-gray-200 hover:border-red-200 text-gray-600 hover:text-red-600 text-sm rounded-md transition-colors'
-            onClick={() => window.open('https://github.com/codewithun', '_blank')}
-          >
-            <Github className='h-3.5 w-3.5 mr-1.5' />
-            More Projects
-          </Button>
+            {/* View More */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: 0.3 }}
+              className='text-center mt-8'
+            >
+              <a
+                href='https://github.com/codewithun'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm text-zinc-400 hover:text-zinc-200 bg-zinc-900 border border-zinc-800 hover:border-zinc-700 transition-all duration-300'
+              >
+                <Github className='h-3.5 w-3.5' />
+                View more on GitHub
+                <ArrowUpRight className='h-3 w-3' />
+              </a>
+            </motion.div>
+          </div>
         </div>
       </div>
     </section>

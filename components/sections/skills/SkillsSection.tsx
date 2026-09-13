@@ -2,8 +2,6 @@
 
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { useState } from 'react';
 
 type Skill = {
   name: string;
@@ -11,244 +9,124 @@ type Skill = {
   category: 'frontend' | 'backend' | 'database' | 'tools';
 };
 
-function SkillCard({ skill, index }: { skill: Skill; index: number }) {
+const skills: Skill[] = [
+  // Frontend
+  { name: 'React', icon: '/assets/icon/react.png', category: 'frontend' },
+  { name: 'Next.js', icon: '/assets/icon/next-js.svg', category: 'frontend' },
+  { name: 'HTML5', icon: '/assets/icon/html.png', category: 'frontend' },
+  { name: 'CSS3', icon: '/assets/icon/css.svg', category: 'frontend' },
+  { name: 'Tailwind CSS', icon: '/assets/icon/tailwind-css.svg', category: 'frontend' },
+  { name: 'JavaScript', icon: '/assets/icon/javascript-js.svg', category: 'frontend' },
+  // Backend
+  { name: 'Laravel', icon: '/assets/icon/laravel.svg', category: 'backend' },
+  { name: 'PHP', icon: '/assets/icon/php.png', category: 'backend' },
+  { name: 'Python', icon: '/assets/icon/python.svg', category: 'backend' },
+  // Database
+  { name: 'MySQL', icon: '/assets/icon/mysql.svg', category: 'database' },
+  { name: 'Firebase', icon: '/assets/icon/file-type-firebase.svg', category: 'database' },
+  // Tools
+  { name: 'Git', icon: '/assets/icon/git.svg', category: 'tools' },
+  { name: 'GitHub', icon: '/assets/icon/github.svg', category: 'tools' },
+  { name: 'VS Code', icon: '/assets/icon/vscode.svg', category: 'tools' },
+  { name: 'Docker', icon: '/assets/icon/docker.svg', category: 'tools' },
+  { name: 'Postman', icon: '/assets/icon/postman.svg', category: 'tools' },
+];
+
+const categories = [
+  { id: 'frontend', label: 'Frontend' },
+  { id: 'backend', label: 'Backend' },
+  { id: 'database', label: 'Database' },
+  { id: 'tools', label: 'Tools' },
+];
+
+function SkillIcon({ skill, index }: { skill: Skill; index: number }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{
-        duration: 0.3,
-        delay: index * 0.03,
-        ease: 'easeOut',
-      }}
+      initial={{ opacity: 0, scale: 0.9 }}
+      whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
-      className='group'
+      transition={{ duration: 0.3, delay: index * 0.03 }}
+      className='group flex flex-col items-center gap-2.5'
     >
-      <div className='bg-white/80 backdrop-blur-sm rounded-lg p-4 hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-red-200'>
-        <div className='flex flex-col items-center justify-center gap-3 text-center'>
-          <div className='w-12 h-12 flex items-center justify-center relative bg-gray-50/70 rounded-full p-2.5'>
-            <Image
-              src={skill.icon}
-              alt={`${skill.name} icon`}
-              width={30}
-              height={30}
-              unoptimized
-              className='object-contain transition-transform group-hover:scale-110'
-            />
-          </div>
-          <h3 className='text-sm font-medium text-gray-800 group-hover:text-red-600 transition-colors'>
-            {skill.name}
-          </h3>
-        </div>
+      <div className='w-12 h-12 md:w-14 md:h-14 rounded-xl bg-zinc-800/50 border border-zinc-700/30 flex items-center justify-center group-hover:border-zinc-600 group-hover:bg-zinc-800 group-hover:scale-110 transition-all duration-300'>
+        <Image
+          src={skill.icon}
+          alt={`${skill.name} icon`}
+          width={28}
+          height={28}
+          unoptimized
+          className='object-contain opacity-70 group-hover:opacity-100 transition-opacity duration-300'
+        />
       </div>
+      <span className='text-[11px] text-zinc-500 group-hover:text-zinc-300 transition-colors duration-300 text-center leading-tight'>
+        {skill.name}
+      </span>
     </motion.div>
   );
 }
 
 export default function SkillsSection() {
-  const [activeFilter, setActiveFilter] = useState('all');
-
-  const skills: Skill[] = [
-    // Frontend
-    {
-      name: 'React',
-      icon: '/assets/icon/react.png',
-      category: 'frontend',
-    },
-    {
-      name: 'Next.js',
-      icon: '/assets/icon/next-js.svg',
-      category: 'frontend',
-    },
-    {
-      name: 'HTML5',
-      icon: '/assets/icon/html.png',
-      category: 'frontend',
-    },
-    {
-      name: 'CSS3',
-      icon: '/assets/icon/css.svg',
-      category: 'frontend',
-    },
-    {
-      name: 'Tailwind CSS',
-      icon: '/assets/icon/tailwind-css.svg',
-      category: 'frontend',
-    },
-    {
-      name: 'JavaScript',
-      icon: '/assets/icon/javascript-js.svg',
-      category: 'frontend',
-    },
-
-    // Backend
-    {
-      name: 'Laravel',
-      icon: '/assets/icon/laravel.svg',
-      category: 'backend',
-    },
-    {
-      name: 'PHP',
-      icon: '/assets/icon/php.png',
-      category: 'backend',
-    },
-    {
-      name: 'Python',
-      icon: '/assets/icon/python.svg',
-      category: 'backend',
-    },
-
-    // Database
-    {
-      name: 'MySQL',
-      icon: '/assets/icon/mysql.svg',
-      category: 'database',
-    },
-    {
-      name: 'Firebase',
-      icon: '/assets/icon/file-type-firebase.svg',
-      category: 'database',
-    },
-
-    // Tools & Others
-    {
-      name: 'Git',
-      icon: '/assets/icon/git.svg',
-      category: 'tools',
-    },
-    {
-      name: 'GitHub',
-      icon: '/assets/icon/github.svg',
-      category: 'tools',
-    },
-    {
-      name: 'VS Code',
-      icon: '/assets/icon/vscode.svg',
-      category: 'tools',
-    },
-    {
-      name: 'Docker',
-      icon: '/assets/icon/docker.svg',
-      category: 'tools',
-    },
-    {
-      name: 'Postman',
-      icon: '/assets/icon/postman.svg',
-      category: 'tools',
-    },
-  ];
-  const filters = [
-    { id: 'all', label: 'All', count: skills.length },
-    {
-      id: 'frontend',
-      label: 'Frontend',
-      count: skills.filter((s) => s.category === 'frontend').length,
-    },
-    {
-      id: 'backend',
-      label: 'Backend',
-      count: skills.filter((s) => s.category === 'backend').length,
-    },
-    {
-      id: 'database',
-      label: 'Database',
-      count: skills.filter((s) => s.category === 'database').length,
-    },
-    {
-      id: 'tools',
-      label: 'Tools',
-      count: skills.filter((s) => s.category === 'tools').length,
-    },
-  ];
-
-  const filteredSkills =
-    activeFilter === 'all'
-      ? skills
-      : skills.filter((skill) => skill.category === activeFilter);
   return (
-    <section
-      id='skills'
-      className='py-20 scroll-mt-20 bg-gradient-to-b from-white to-gray-50/80 relative overflow-hidden'
-    >
-      {/* Simple divider */}
-      <div className='absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent' />
-      {/* Background elements */}
-      <div className='absolute -right-10 top-40 w-40 h-40 bg-red-100 rounded-full opacity-20 blur-3xl' />
-      <div className='absolute -left-10 bottom-20 w-60 h-60 bg-red-50 rounded-full opacity-30 blur-3xl' />
+    <section id='skills' className='scroll-mt-20'>
+      <div className='relative w-full max-w-3xl mx-auto'>
+        {/* Corner Accents for the Section */}
+        <div className="absolute top-0 left-0 w-2 h-2 border-t-[1.5px] border-l-[1.5px] border-zinc-500 z-20 pointer-events-none" />
+        <div className="absolute top-0 right-0 w-2 h-2 border-t-[1.5px] border-r-[1.5px] border-zinc-500 z-20 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-2 h-2 border-b-[1.5px] border-l-[1.5px] border-zinc-500 z-20 pointer-events-none" />
+        <div className="absolute bottom-0 right-0 w-2 h-2 border-b-[1.5px] border-r-[1.5px] border-zinc-500 z-20 pointer-events-none" />
 
-      <div className='container mx-auto px-4 sm:px-6 lg:px-8 relative z-10'>
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
-          className='text-center mb-12'
-        >
-          <h2 className='text-3xl md:text-4xl font-bold mb-3 bg-gradient-to-r from-red-600 to-red-500 bg-clip-text text-transparent'>
-            Technical Skills
-          </h2>
-          <p className='text-base text-gray-600 max-w-xl mx-auto'>
-            Technologies and tools I use to bring{' '}
-            <span className='font-medium text-red-600'>ideas to life</span>
-          </p>
-        </motion.div>
+        <div className='p-4'>
+          <div className='w-full'>
+            {/* Section Header */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4 }}
+              className='mb-12'
+            >
+              <h2 className='font-semibold tracking-tight text-[30px] text-zinc-100 mb-3'>
+                tech stack
+              </h2>
+              <p className='text-sm text-zinc-500'>
+                Technologies and tools I use to bring ideas to life.
+              </p>
+            </motion.div>
 
-        {/* Filter Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.1 }}
-          viewport={{ once: true }}
-          className='flex justify-center mb-12'
-        >
-          <div className='flex flex-wrap justify-center gap-3 mx-auto backdrop-blur-sm bg-white/30 p-2 rounded-full border border-gray-100 shadow-sm'>
-            {filters.map((filter) => (
-              <Button
-                key={filter.id}
-                onClick={() => setActiveFilter(filter.id)}
-                variant='ghost'
-                className={`px-5 py-1.5 text-sm transition-all duration-300 rounded-full ${
-                  activeFilter === filter.id
-                    ? 'bg-white text-red-600 shadow-sm ring-1 ring-red-100'
-                    : 'text-gray-500 hover:text-red-500 hover:bg-white/80'
-                }`}
-              >
-                {filter.label}
-                {filter.count > 0 && (
-                  <span
-                    className={`ml-1.5 text-xs ${
-                      activeFilter === filter.id
-                        ? 'text-red-500'
-                        : 'text-gray-400'
-                    }`}
+            {/* Skills by Category */}
+            <div className='space-y-10'>
+              {categories.map((category) => {
+                const categorySkills = skills.filter(
+                  (s) => s.category === category.id
+                );
+                return (
+                  <motion.div
+                    key={category.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4 }}
                   >
-                    {filter.count}
-                  </span>
-                )}
-              </Button>
-            ))}
+                    {/* Category Label */}
+                    <div className='flex items-center gap-3 mb-5'>
+                      <span className='text-[10px] uppercase tracking-[0.2em] text-zinc-600 font-medium'>
+                        {category.label}
+                      </span>
+                      <div className='flex-1 h-px bg-zinc-800/80' />
+                    </div>
+
+                    {/* Icons Grid */}
+                    <div className='grid grid-cols-4 sm:grid-cols-6 gap-6'>
+                      {categorySkills.map((skill, index) => (
+                        <SkillIcon key={skill.name} skill={skill} index={index} />
+                      ))}
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
           </div>
-        </motion.div>
-
-        {/* Skills Grid */}
-        <motion.div
-          layout
-          className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 max-w-5xl mx-auto'
-        >
-          {filteredSkills.map((skill, index) => (
-            <SkillCard key={skill.name} skill={skill} index={index} />
-          ))}
-        </motion.div>
-
-        {/* Footer decoration */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.3 }}
-          viewport={{ once: true }}
-          className='mt-12 flex justify-center'
-        ></motion.div>
+        </div>
       </div>
     </section>
   );
