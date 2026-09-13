@@ -46,8 +46,8 @@ const experiences: ExperienceItem[] = [
     roleIcon: <Code className='h-4 w-4 text-zinc-400' />,
     role: 'Teknik Informatika',
     type: 'Education',
-    period: '08.2023 - 11.2026',
-    duration: '3y 3m',
+    period: '08.2023 - 09.2026',
+    duration: '3y 2m',
     highlights: [
       'Mempelajari bahasa pemrograman dan kerangka kerja modern.',
       'Pengembangan aplikasi berbasis web dan mobile.',
